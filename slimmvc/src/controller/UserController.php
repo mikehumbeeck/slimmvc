@@ -9,7 +9,7 @@
 namespace App\Controller;
 
 
-use App\Model\UserService;
+use App\Model\Services\UserService;
 
 class UserController
 {
@@ -25,10 +25,26 @@ class UserController
     //Verbinding maken naar model en user uit DB halen
         $user = $this->userService->getUser($id);
         $args = [
-            'firstname'=> $user->getFirstname(),
-            'lastname' => $user->getLastname(),
-            'age' => $user->getAge()
+            'email'=> $user->getEmail(),
+            'id' => $user->getUserid(),//Hebt de id nodig voor de knop
+            'password' => $user->getPassword()
         ];
         return $args;
+    }
+
+    public function createUser($email, $password) {
+        $this->userService->createUser($email, $password);
+    }
+
+    public function deleteUser($id) {
+        $this->userService->deleteUser($id);
+        $args = [
+          'message' => "User " . $id . " is gone"
+        ];
+        return $args;
+    }
+
+    public function updatePassword($id, $old_password, $new_password, $rep_password) {
+        $this->userService->updatePassword($id, $old_password, $new_password, $rep_password);
     }
 }
